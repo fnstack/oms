@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Common\Config.fs" />
+    <Compile Include="Common\Validation.fs" />
+    <Compile Include="ProductCategories\ProductCategory.Validators.fs" />
+    <Compile Include="ProductCategories\ProductCategory.HttpHandlers.fs" />
+    <Compile Include="ProductCategories\ProductCategory.Router.fs" />
+    <Compile Include="ProductBrands\ProductBrand.Validators.fs" />
+    <Compile Include="ProductBrands\ProductBrand.HttpHandlers.fs" />
+    <Compile Include="ProductBrands\ProductBrand.Router.fs" />
+    <Compile Include="WebServer\Router.fs" />
+    <Compile Include="WebServer\WebServer.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OMS.Application\OMS.Application.fsproj" />
+    <ProjectReference Include="..\OMS.DataAccess\OMS.DataAccess.fsproj" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

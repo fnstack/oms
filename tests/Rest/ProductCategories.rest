@@ -1,0 +1,32 @@
+@url = http://localhost:8086/api
+
+GET {{url}}/products/categories
+Accept: application/json 
+
+###
+
+POST {{url}}/products/categories
+content-type: application/json
+Accept: application/json
+
+{
+    "name": "sample",
+    "description": "Wed, 21 Oct 2015 18:27:50 GMT"
+}
+
+###
+
+PUT {{url}}/products/categories/5ca1004e8479932458606216
+Accept: application/json
+
+{
+    "id": "5ca1004e8479932458606216",
+    "name": "Telephone",
+    "description": "smartphone"
+  }
+
+###
+
+# delete product category
+DELETE  {{url}}/products/categories/5ca4e58e447e851dc84820ab
+Accept: application/json

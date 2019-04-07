@@ -1,0 +1,7 @@
+Fsharp.Core
+Saturn.Extensions.Authorization
+App.Metrics.AspNetCore.Health
+App.Metrics.AspNetCore.Mvc
+MongoDB.Driver
+FluentValidation
+FsToolKit.ErrorHandling

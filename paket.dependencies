@@ -1,0 +1,11 @@
+framework: auto-detect
+source https://api.nuget.org/v3/index.json
+storage: none
+
+nuget App.Metrics.AspNetCore.Health
+nuget App.Metrics.AspNetCore.Mvc
+nuget FluentValidation
+nuget Fsharp.Core
+nuget FsToolKit.ErrorHandling
+nuget MongoDB.Driver
+nuget Saturn.Extensions.Authorization

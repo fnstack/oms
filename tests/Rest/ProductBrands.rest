@@ -1,0 +1,43 @@
+@url = http://localhost:8086/api
+
+GET {{url}}/products/brands
+Accept: application/json 
+
+###
+
+# get product brand by id
+GET {{url}}/products/brands/5ca50a077656010a100cf2c0
+Accept: application/json
+
+###
+
+GET {{url}}/products/brands/search-results?searchTerm=micromania
+Accept: application/json 
+
+###
+
+POST {{url}}/products/brands
+content-type: application/json
+Accept: application/json
+
+{
+    "name": "micromania",
+    "description": ""
+}
+
+###
+
+PUT {{url}}/products/brands/5ca1004e8479932458606216
+Accept: application/json
+
+{
+    "id": "5ca1004e8479932458606216",
+    "name": "Telephone",
+    "description": "smartphone"
+  }
+
+###
+
+# delete product category
+DELETE  {{url}}/products/brands/5ca4e58e447e851dc84820ab
+Accept: application/json
