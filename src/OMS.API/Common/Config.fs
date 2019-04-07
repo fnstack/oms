@@ -23,6 +23,9 @@ let initDb () =
     Builders<ProductBrandDto>.IndexKeys.Text(fun x -> x.Name :> obj)
     |> productBrandCollection.Indexes.CreateOne |> ignore
     
+    Builders<ProductDto>.IndexKeys.Text(fun x -> x.Name :> obj)
+    |> productCollection.Indexes.CreateOne |> ignore
+    
 //    Builders<ProductBrandDto>.IndexKeys.Text(fun x -> x.Description :> obj)
 //    |> productBrandCollection.Indexes.CreateOne |> ignore
     

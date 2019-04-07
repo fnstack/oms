@@ -11,16 +11,36 @@ GET {{url}}/products/5caa245c132dbb04b82282e5
 Accept: application/json
 
 ###
+
+GET {{url}}/products/search-results?searchTerm=XR
+Accept: application/json 
+
+###
 POST {{url}}/products
 Accept: application/json
 
 {
-    "name": "Iphone XR",
+    "name": "Samsung",
     "description": "",
     "brandId": "5ca4fcaad418c315607ada03",
     "categoryId": "5ca1004e8479932458606216",
     "price": "458200"
 }
+
+###
+
+PUT {{url}}/products/5caa2a1fec878721d0816588
+Accept: application/json
+
+{
+    "id": "5caa2a1fec878721d0816588",
+    "name": "Samsung S7",
+    "description": "telephone mobile",
+    "brandId": "5ca4fcaad418c315607ada03",
+    "categoryId": "5ca1004e8479932458606216",
+    "price": "70000"
+  }
+
 
 ###
 # delete product 

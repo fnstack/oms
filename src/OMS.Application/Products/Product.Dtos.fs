@@ -11,7 +11,7 @@ type CreateProductInput =
       Price : string }
 
 type EditProductInput =
-    { Id : ObjectId
+    { Id : string
       Name : string
       Description : string
       BrandId : string

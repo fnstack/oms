@@ -30,6 +30,26 @@ let createProduct (collection : IMongoCollection<ProductDto>,
           CategoryId = input.CategoryId
           Price = input.Price }
     value |> collection.InsertOne
+    
+let searchProducts (collection : IMongoCollection<ProductDto>, searchTerm : string) =
+    let filter = Builders<ProductDto>.Filter.Text(searchTerm)
+    let produts =
+        collection.Find(filter).ToEnumerable() |> Seq.toArray
+    produts
+    
+let editProduct (collection : IMongoCollection<ProductDto>,
+                         input : EditProductInput) =
+    let filter =
+        Builders<ProductDto>
+            .Filter.Eq((fun x -> x.Id), input.Id |> ObjectId.Parse)
+    let update =
+        Builders<ProductDto>
+            .Update.Set((fun x -> x.Name), input.Name)
+            .Set((fun x -> x.Description), input.Description)
+            .Set((fun x -> x.BrandId), input.BrandId)
+            .Set((fun x -> x.CategoryId), input.CategoryId)
+            .Set((fun x -> x.Price), input.Price) 
+    collection.UpdateOne(filter, update) |> ignore
 
 let deleteProduct (collection : IMongoCollection<ProductDto>,
                            productId : ObjectId) =

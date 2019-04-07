@@ -45,6 +45,31 @@ let createProductsHandler : HttpHandler =
                         |> createProduct
                         Successful.OK () next ctx
         }
+ 
+let editProductHandler (productId : string) : HttpHandler =
+    fun (next : HttpFunc) (ctx : HttpContext) ->
+        task {
+            return! match productId |> ObjectId.TryParse with
+                    | false, _ ->
+                        let message = "L'ID est nul"
+                        RequestErrors.BAD_REQUEST message next ctx
+                    | true, productId ->
+                        task {
+                            let! input = ctx.BindJsonAsync<EditProductInput>
+                                             ()
+                            let! result = input
+                                          |> editProductInputValidator.ValidateAsync
+                            match result.IsValid with
+                            | false ->
+                                let message = result |> aggregateErrorMessages
+                                return! RequestErrors.BAD_REQUEST message next
+                                            ctx
+                            | true ->
+                                (productCollection, input)
+                                |> editProduct
+                                return! Successful.OK () next ctx
+                        }
+        }
         
 let deleteProductHandler (productId : string) : HttpHandler =
     fun (next : HttpFunc) (ctx : HttpContext) ->
@@ -59,3 +84,22 @@ let deleteProductHandler (productId : string) : HttpHandler =
                         |> ignore
                         Successful.OK (productId) next ctx
         }
+        
+let searchProductsHandler : HttpHandler =
+    fun (next : HttpFunc) (ctx : HttpContext) ->
+        task {
+            return!(
+                result {
+                    let! searchTerm = ctx.GetQueryStringValue "searchTerm"
+                    
+                    return searchTerm
+                }
+                |> function
+                    | Ok searchTerm ->
+                        let products = (productCollection, searchTerm) |> searchProducts
+                        Successful.OK products next ctx
+                    | Error error ->
+                        let message = "L'ID est nul"
+                        RequestErrors.BAD_REQUEST message next ctx)
+         
+         }
