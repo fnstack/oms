@@ -2,3 +2,27 @@
 
 GET {{url}}/products
 Accept: application/json 
+
+
+###
+
+# get product by id
+GET {{url}}/products/5caa245c132dbb04b82282e5
+Accept: application/json
+
+###
+POST {{url}}/products
+Accept: application/json
+
+{
+    "name": "Iphone XR",
+    "description": "",
+    "brandId": "5ca4fcaad418c315607ada03",
+    "categoryId": "5ca1004e8479932458606216",
+    "price": "458200"
+}
+
+###
+# delete product 
+DELETE  {{url}}/products/5caa22c2fb04b01eec05746f
+Accept: application/json

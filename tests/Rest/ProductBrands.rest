@@ -38,6 +38,6 @@ Accept: application/json
 
 ###
 
-# delete product category
+# delete product brand
 DELETE  {{url}}/products/brands/5ca4e58e447e851dc84820ab
 Accept: application/json

@@ -9,4 +9,8 @@ let productRouter =
     router{
         not_found_handler(text "Resource not found")
         get "" getProductsHandler
+        getf "/%s" getProductByIdHandler
+        post "" createProductsHandler
+        deletef "/%s" deleteProductHandler
+        
     }
