@@ -9,5 +9,8 @@
   <ItemGroup>
     <Compile Include="ProductBrands\ProductBrand.Dtos.fs" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Products\Product.Dtos.fs" />
+  </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

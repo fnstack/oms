@@ -1,0 +1,4 @@
+@url = http://localhost:8086/api
+
+GET {{url}}/products
+Accept: application/json 

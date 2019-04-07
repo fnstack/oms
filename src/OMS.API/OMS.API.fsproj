@@ -13,6 +13,9 @@
     <Compile Include="ProductBrands\ProductBrand.Validators.fs" />
     <Compile Include="ProductBrands\ProductBrand.HttpHandlers.fs" />
     <Compile Include="ProductBrands\ProductBrand.Router.fs" />
+    <Compile Include="Products\Product.Validators.fs" />
+    <Compile Include="Products\Product.HttpHandler.fs" />
+    <Compile Include="Products\Product.Router.fs" />
     <Compile Include="WebServer\Router.fs" />
     <Compile Include="WebServer\WebServer.fs" />
   </ItemGroup>

@@ -16,6 +16,8 @@ let productCategoryCollection =
     "product-categories" |> db.GetCollection<ProductCategoryDto>
 let productBrandCollection =
     "product-brands" |> db.GetCollection<ProductBrandDto>
+let productCollection =
+    "products" |> db.GetCollection<ProductDto>
     
 let initDb () =
     Builders<ProductBrandDto>.IndexKeys.Text(fun x -> x.Name :> obj)

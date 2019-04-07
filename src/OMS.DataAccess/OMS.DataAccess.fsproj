@@ -12,5 +12,8 @@
   <ItemGroup>
     <Compile Include="ProductBrands\ProductBrand.Repository.fs" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Products\Product.Repository.fs" />
+  </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
