@@ -2,9 +2,7 @@ open Saturn
 open OMS.API
 
 let app =
-
-    initDb ()
-    
+    initDb()
     application {
         url "http://0.0.0.0:8086"
         use_router appRouter
