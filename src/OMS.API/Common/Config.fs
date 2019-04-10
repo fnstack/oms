@@ -16,16 +16,14 @@ let productCategoryCollection =
     "product-categories" |> db.GetCollection<ProductCategoryDto>
 let productBrandCollection =
     "product-brands" |> db.GetCollection<ProductBrandDto>
-let productCollection =
-    "products" |> db.GetCollection<ProductDto>
-    
-let initDb () =
+let productCollection = "products" |> db.GetCollection<ProductDto>
+
+let initDb() =
     Builders<ProductBrandDto>.IndexKeys.Text(fun x -> x.Name :> obj)
-    |> productBrandCollection.Indexes.CreateOne |> ignore
-    
+    |> productBrandCollection.Indexes.CreateOne
+    |> ignore
     Builders<ProductDto>.IndexKeys.Text(fun x -> x.Name :> obj)
-    |> productCollection.Indexes.CreateOne |> ignore
-    
+    |> productCollection.Indexes.CreateOne
+    |> ignore
 //    Builders<ProductBrandDto>.IndexKeys.Text(fun x -> x.Description :> obj)
 //    |> productBrandCollection.Indexes.CreateOne |> ignore
-    

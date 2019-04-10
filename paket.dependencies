@@ -4,8 +4,13 @@ storage: none
 
 nuget App.Metrics.AspNetCore.Health
 nuget App.Metrics.AspNetCore.Mvc
+nuget Equinox.EventStore 2.0.0-preview4 preview
+nuget Equinox.MemoryStore 2.0.0-preview4 preview
 nuget FluentValidation
 nuget Fsharp.Core
+nuget FSharp.UMX
 nuget FsToolKit.ErrorHandling
+nuget Jet.JsonNet.Converters
 nuget MongoDB.Driver
 nuget Saturn.Extensions.Authorization
+nuget Serilog

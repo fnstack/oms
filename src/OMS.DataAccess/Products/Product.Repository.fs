@@ -11,15 +11,15 @@ let getProducts (collection : IMongoCollection<ProductDto>) =
     let Products =
         collection.Find(Builders.Filter.Empty).ToEnumerable() |> Seq.toArray
     Products
-    
-let getProductById (collection : IMongoCollection<ProductDto>, productId : ObjectId) =
+
+let getProductById (collection : IMongoCollection<ProductDto>,
+                    productId : ObjectId) =
     let filter = Builders<ProductDto>.Filter.Where(fun x -> x.Id = productId)
-    let product =
-        collection.Find(filter).ToEnumerable() |> Seq.head
+    let product = collection.Find(filter).ToEnumerable() |> Seq.head
     product
 
 let createProduct (collection : IMongoCollection<ProductDto>,
-                           input : CreateProductInput) =
+                   input : CreateProductInput) =
     let id = ObjectId.GenerateNewId()
 
     let value =
@@ -30,15 +30,15 @@ let createProduct (collection : IMongoCollection<ProductDto>,
           CategoryId = input.CategoryId
           Price = input.Price }
     value |> collection.InsertOne
-    
-let searchProducts (collection : IMongoCollection<ProductDto>, searchTerm : string) =
+
+let searchProducts (collection : IMongoCollection<ProductDto>,
+                    searchTerm : string) =
     let filter = Builders<ProductDto>.Filter.Text(searchTerm)
-    let produts =
-        collection.Find(filter).ToEnumerable() |> Seq.toArray
+    let produts = collection.Find(filter).ToEnumerable() |> Seq.toArray
     produts
-    
+
 let editProduct (collection : IMongoCollection<ProductDto>,
-                         input : EditProductInput) =
+                 input : EditProductInput) =
     let filter =
         Builders<ProductDto>
             .Filter.Eq((fun x -> x.Id), input.Id |> ObjectId.Parse)
@@ -48,9 +48,9 @@ let editProduct (collection : IMongoCollection<ProductDto>,
             .Set((fun x -> x.Description), input.Description)
             .Set((fun x -> x.BrandId), input.BrandId)
             .Set((fun x -> x.CategoryId), input.CategoryId)
-            .Set((fun x -> x.Price), input.Price) 
+            .Set((fun x -> x.Price), input.Price)
     collection.UpdateOne(filter, update) |> ignore
 
 let deleteProduct (collection : IMongoCollection<ProductDto>,
-                           productId : ObjectId) =
+                   productId : ObjectId) =
     collection.DeleteOne(fun x -> x.Id = productId)

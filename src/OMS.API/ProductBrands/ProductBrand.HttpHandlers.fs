@@ -8,7 +8,7 @@ open FSharp.Control.Tasks.V2.ContextInsensitive
 open MongoDB.Bson
 open OMS.Data
 open OMS.Application
-open FsToolkit.ErrorHandling.CE.Result
+open FsToolkit.ErrorHandling.ResultCE
 
 let createProductBrandHandler : HttpHandler =
     fun (next : HttpFunc) (ctx : HttpContext) ->
@@ -21,8 +21,7 @@ let createProductBrandHandler : HttpHandler =
                         let message = result |> aggregateErrorMessages
                         RequestErrors.BAD_REQUEST message next ctx
                     | true ->
-                        (productBrandCollection, input)
-                        |> createProductBrand
+                        (productBrandCollection, input) |> createProductBrand
                         Successful.OK () next ctx
         }
 
@@ -71,35 +70,34 @@ let getProductBrandsHandler : HttpHandler =
             let brands = productBrandCollection |> getProductBrands
             return! Successful.OK brands next ctx
         }
-        
-let getProductBrandByIdHandler(productBrandId : string) : HttpHandler =
+
+let getProductBrandByIdHandler (productBrandId : string) : HttpHandler =
     fun (next : HttpFunc) (ctx : HttpContext) ->
         task {
-           return! match productBrandId |> ObjectId.TryParse with
+            return! match productBrandId |> ObjectId.TryParse with
                     | false, _ ->
                         let message = "L'ID est incorrect"
                         RequestErrors.BAD_REQUEST message next ctx
                     | true, productBrandId ->
-                        let productBrand = (productBrandCollection, productBrandId)
-                                            |> getProductBrandById                     
+                        let productBrand =
+                            (productBrandCollection, productBrandId)
+                            |> getProductBrandById
                         Successful.OK (productBrand) next ctx
         }
-        
+
 let searchProductBrandsHandler : HttpHandler =
     fun (next : HttpFunc) (ctx : HttpContext) ->
         task {
-            return!(
-                result {
-                    let! searchTerm = ctx.GetQueryStringValue "searchTerm"
-                    
-                    return searchTerm
-                }
-                |> function
-                    | Ok searchTerm ->
-                        let brands = (productBrandCollection, searchTerm) |> searchProductBrands
-                        Successful.OK brands next ctx
-                    | Error error ->
-                        let message = "L'ID est nul"
-                        RequestErrors.BAD_REQUEST message next ctx)
-         
-         }
+            return! (result { let! searchTerm = ctx.GetQueryStringValue
+                                                    "searchTerm"
+                              return searchTerm }
+                     |> function
+                     | Ok searchTerm ->
+                         let brands =
+                             (productBrandCollection, searchTerm)
+                             |> searchProductBrands
+                         Successful.OK brands next ctx
+                     | Error error ->
+                         let message = "L'ID est nul"
+                         RequestErrors.BAD_REQUEST message next ctx)
+        }

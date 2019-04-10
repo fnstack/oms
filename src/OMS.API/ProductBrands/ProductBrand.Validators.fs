@@ -10,8 +10,7 @@ type CreateProductBrandInputValidator() =
         base.RuleFor(fun input -> input.Name).NotEmpty().MaximumLength(50)
             .MinimumLength(5) |> ignore
 
-let createProductBrandInputValidator =
-    new CreateProductBrandInputValidator()
+let createProductBrandInputValidator = new CreateProductBrandInputValidator()
 
 type EditProductBrandInputValidator() =
     inherit AbstractValidator<EditProductBrandInput>()

@@ -12,20 +12,20 @@ let getProductBrands (collection : IMongoCollection<ProductBrandDto>) =
         collection.Find(Builders.Filter.Empty).ToEnumerable() |> Seq.toArray
     brands
 
-let getProductBrandById (collection : IMongoCollection<ProductBrandDto>, brandId : ObjectId) =
+let getProductBrandById (collection : IMongoCollection<ProductBrandDto>,
+                         brandId : ObjectId) =
     let filter = Builders<ProductBrandDto>.Filter.Where(fun x -> x.Id = brandId)
-    let brand =
-        collection.Find(filter).ToEnumerable() |> Seq.head
+    let brand = collection.Find(filter).ToEnumerable() |> Seq.head
     brand
 
-let searchProductBrands (collection : IMongoCollection<ProductBrandDto>, searchTerm : string) =
+let searchProductBrands (collection : IMongoCollection<ProductBrandDto>,
+                         searchTerm : string) =
     let filter = Builders<ProductBrandDto>.Filter.Text(searchTerm)
-    let brands =
-        collection.Find(filter).ToEnumerable() |> Seq.toArray
+    let brands = collection.Find(filter).ToEnumerable() |> Seq.toArray
     brands
 
 let createProductBrand (collection : IMongoCollection<ProductBrandDto>,
-                           input : CreateProductBrandInput) =
+                        input : CreateProductBrandInput) =
     let id = ObjectId.GenerateNewId()
 
     let value =
@@ -35,11 +35,11 @@ let createProductBrand (collection : IMongoCollection<ProductBrandDto>,
     value |> collection.InsertOne
 
 let deleteProductBrand (collection : IMongoCollection<ProductBrandDto>,
-                           productBrandId : ObjectId) =
+                        productBrandId : ObjectId) =
     collection.DeleteOne(fun x -> x.Id = productBrandId)
 
 let editProductBrand (collection : IMongoCollection<ProductBrandDto>,
-                         input : EditProductBrandInput) =
+                      input : EditProductBrandInput) =
     let filter =
         Builders<ProductBrandDto>
             .Filter.Eq((fun x -> x.Id), input.Id |> ObjectId.Parse)

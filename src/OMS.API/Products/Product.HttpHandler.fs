@@ -8,7 +8,7 @@ open FSharp.Control.Tasks.V2.ContextInsensitive
 open MongoDB.Bson
 open OMS.Data
 open OMS.Application
-open FsToolkit.ErrorHandling.CE.Result
+open FsToolkit.ErrorHandling.ResultCE
 
 let getProductsHandler : HttpHandler =
     fun (next : HttpFunc) (ctx : HttpContext) ->
@@ -16,36 +16,34 @@ let getProductsHandler : HttpHandler =
             let Products = productCollection |> getProducts
             return! Successful.OK Products next ctx
         }
-        
-let getProductByIdHandler(productId : string) : HttpHandler =
+
+let getProductByIdHandler (productId : string) : HttpHandler =
     fun (next : HttpFunc) (ctx : HttpContext) ->
         task {
-           return! match productId |> ObjectId.TryParse with
+            return! match productId |> ObjectId.TryParse with
                     | false, _ ->
                         let message = "L'ID est incorrect"
                         RequestErrors.BAD_REQUEST message next ctx
                     | true, productId ->
-                        let product = (productCollection, productId)
-                                            |> getProductById                     
+                        let product =
+                            (productCollection, productId) |> getProductById
                         Successful.OK (product) next ctx
         }
-        
+
 let createProductsHandler : HttpHandler =
     fun (next : HttpFunc) (ctx : HttpContext) ->
         task {
             let! input = ctx.BindJsonAsync<CreateProductInput>()
-            let! result = input
-                          |> createProductInputValidator.ValidateAsync
-            return! match result.IsValid with                    
+            let! result = input |> createProductInputValidator.ValidateAsync
+            return! match result.IsValid with
                     | false ->
                         let message = result |> aggregateErrorMessages
                         RequestErrors.BAD_REQUEST message next ctx
                     | true ->
-                        (productCollection, input)
-                        |> createProduct
+                        (productCollection, input) |> createProduct
                         Successful.OK () next ctx
         }
- 
+
 let editProductHandler (productId : string) : HttpHandler =
     fun (next : HttpFunc) (ctx : HttpContext) ->
         task {
@@ -55,8 +53,7 @@ let editProductHandler (productId : string) : HttpHandler =
                         RequestErrors.BAD_REQUEST message next ctx
                     | true, productId ->
                         task {
-                            let! input = ctx.BindJsonAsync<EditProductInput>
-                                             ()
+                            let! input = ctx.BindJsonAsync<EditProductInput>()
                             let! result = input
                                           |> editProductInputValidator.ValidateAsync
                             match result.IsValid with
@@ -65,12 +62,11 @@ let editProductHandler (productId : string) : HttpHandler =
                                 return! RequestErrors.BAD_REQUEST message next
                                             ctx
                             | true ->
-                                (productCollection, input)
-                                |> editProduct
+                                (productCollection, input) |> editProduct
                                 return! Successful.OK () next ctx
                         }
         }
-        
+
 let deleteProductHandler (productId : string) : HttpHandler =
     fun (next : HttpFunc) (ctx : HttpContext) ->
         task {
@@ -84,22 +80,19 @@ let deleteProductHandler (productId : string) : HttpHandler =
                         |> ignore
                         Successful.OK (productId) next ctx
         }
-        
+
 let searchProductsHandler : HttpHandler =
     fun (next : HttpFunc) (ctx : HttpContext) ->
         task {
-            return!(
-                result {
-                    let! searchTerm = ctx.GetQueryStringValue "searchTerm"
-                    
-                    return searchTerm
-                }
-                |> function
-                    | Ok searchTerm ->
-                        let products = (productCollection, searchTerm) |> searchProducts
-                        Successful.OK products next ctx
-                    | Error error ->
-                        let message = "L'ID est nul"
-                        RequestErrors.BAD_REQUEST message next ctx)
-         
-         }
+            return! (result { let! searchTerm = ctx.GetQueryStringValue
+                                                    "searchTerm"
+                              return searchTerm }
+                     |> function
+                     | Ok searchTerm ->
+                         let products =
+                             (productCollection, searchTerm) |> searchProducts
+                         Successful.OK products next ctx
+                     | Error error ->
+                         let message = "L'ID est nul"
+                         RequestErrors.BAD_REQUEST message next ctx)
+        }

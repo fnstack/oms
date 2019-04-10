@@ -10,5 +10,5 @@ let appRouter =
         get "/" (text "welcome to OMS API")
         forward "/api/products/categories" productCategoryRouter
         forward "/api/products/brands" productBrandRouter
-        forward "/api/products" productRouter 
+        forward "/api/products" productRouter
     }
