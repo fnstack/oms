@@ -58,15 +58,17 @@ let editProductHandler (productId : string) : HttpHandler =
                         task {
                             let! input = ctx.BindJsonAsync<EditProductInput>()
                             if input |> isNullObject then
-                               return! RequestErrors.BAD_REQUEST "Incorrecte value" next ctx
+                                return! RequestErrors.BAD_REQUEST
+                                            "Incorrecte value" next ctx
                             else
                                 let! result = input
                                               |> editProductInputValidator.ValidateAsync
                                 match result.IsValid with
                                 | false ->
-                                    let message = result |> aggregateErrorMessages
-                                    return! RequestErrors.UNPROCESSABLE_ENTITY message next
-                                                ctx
+                                    let message =
+                                        result |> aggregateErrorMessages
+                                    return! RequestErrors.UNPROCESSABLE_ENTITY
+                                                message next ctx
                                 | true ->
                                     (productCollection, input) |> editProduct
                                     return! Successful.OK () next ctx

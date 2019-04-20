@@ -7,20 +7,16 @@ open MongoDB.Driver
 open MongoDB.Driver
 open OMS.Application
 
-let getProductCategories (collection : IMongoCollection<ProductCategoryDto>) =
-    let totalDocuments = collection.CountDocuments(Builders.Filter.Empty) |> Convert.ToDecimal
-    
-    let pageSize = 2m
-    let currentPage = 2
-    let totalPages = Math.Ceiling(totalDocuments/pageSize) 
-    
-    let skip = Nullable<int>.op_Implicit ((currentPage - 1) * (pageSize |> Convert.ToInt32))
-    
+let getProductCategories (collection : IMongoCollection<ProductCategoryDto>,
+                          page : int, pageSize : int) =
+    let totalDocuments =
+        collection.CountDocuments(Builders.Filter.Empty) |> Convert.ToDecimal
+    //    let totalPages = Math.Ceiling(totalDocuments/(pageSize |> Convert.ToDecimal))
+    let skip = Nullable<int>.op_Implicit((page - 1) * pageSize)
+    let limit = Nullable<int>.op_Implicit pageSize
     let categories =
-        collection.Find(Builders.Filter.Empty)
-            .Skip(skip)
-            .Limit(Nullable<int>.op_Implicit (pageSize |> Convert.ToInt32))
-            .ToEnumerable() |> Seq.toArray
+        collection.Find(Builders.Filter.Empty).Skip(skip).Limit(limit)
+                  .ToEnumerable() |> Seq.toArray
     categories
 
 let createProductCategory (collection : IMongoCollection<ProductCategoryDto>,

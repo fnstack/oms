@@ -24,7 +24,8 @@ let createProductBrandHandler : HttpHandler =
                             let message = result |> aggregateErrorMessages
                             RequestErrors.UNPROCESSABLE_ENTITY message next ctx
                         | true ->
-                            (productBrandCollection, input) |> createProductBrand
+                            (productBrandCollection, input)
+                            |> createProductBrand
                             Successful.OK () next ctx
         }
 
@@ -40,15 +41,17 @@ let editProductBrandHandler (productBrandId : string) : HttpHandler =
                             let! input = ctx.BindJsonAsync<EditProductBrandInput>
                                              ()
                             if input |> isNullObject then
-                                return! RequestErrors.BAD_REQUEST "Incorrecte value" next ctx
-                            else                 
+                                return! RequestErrors.BAD_REQUEST
+                                            "Incorrecte value" next ctx
+                            else
                                 let! result = input
                                               |> editProductBrandInputValidator.ValidateAsync
                                 match result.IsValid with
                                 | false ->
-                                    let message = result |> aggregateErrorMessages
-                                    return! RequestErrors.UNPROCESSABLE_ENTITY message next
-                                                ctx
+                                    let message =
+                                        result |> aggregateErrorMessages
+                                    return! RequestErrors.UNPROCESSABLE_ENTITY
+                                                message next ctx
                                 | true ->
                                     (productBrandCollection, input)
                                     |> editProductBrand

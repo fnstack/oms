@@ -1,6 +1,6 @@
 @url = http://localhost:8086/api
 
-GET {{url}}/products/categories
+GET {{url}}/products/categories?page=3&pageSize=2
 Accept: application/json 
 
 ###
