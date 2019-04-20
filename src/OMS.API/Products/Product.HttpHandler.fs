@@ -34,14 +34,17 @@ let createProductsHandler : HttpHandler =
     fun (next : HttpFunc) (ctx : HttpContext) ->
         task {
             let! input = ctx.BindJsonAsync<CreateProductInput>()
-            let! result = input |> createProductInputValidator.ValidateAsync
-            return! match result.IsValid with
-                    | false ->
-                        let message = result |> aggregateErrorMessages
-                        RequestErrors.BAD_REQUEST message next ctx
-                    | true ->
-                        (productCollection, input) |> createProduct
-                        Successful.OK () next ctx
+            if input |> isNullObject then
+                return! RequestErrors.BAD_REQUEST "Incorrecte value" next ctx
+            else
+                let! result = input |> createProductInputValidator.ValidateAsync
+                return! match result.IsValid with
+                        | false ->
+                            let message = result |> aggregateErrorMessages
+                            RequestErrors.UNPROCESSABLE_ENTITY message next ctx
+                        | true ->
+                            (productCollection, input) |> createProduct
+                            Successful.OK () next ctx
         }
 
 let editProductHandler (productId : string) : HttpHandler =
@@ -54,16 +57,19 @@ let editProductHandler (productId : string) : HttpHandler =
                     | true, productId ->
                         task {
                             let! input = ctx.BindJsonAsync<EditProductInput>()
-                            let! result = input
-                                          |> editProductInputValidator.ValidateAsync
-                            match result.IsValid with
-                            | false ->
-                                let message = result |> aggregateErrorMessages
-                                return! RequestErrors.BAD_REQUEST message next
-                                            ctx
-                            | true ->
-                                (productCollection, input) |> editProduct
-                                return! Successful.OK () next ctx
+                            if input |> isNullObject then
+                               return! RequestErrors.BAD_REQUEST "Incorrecte value" next ctx
+                            else
+                                let! result = input
+                                              |> editProductInputValidator.ValidateAsync
+                                match result.IsValid with
+                                | false ->
+                                    let message = result |> aggregateErrorMessages
+                                    return! RequestErrors.UNPROCESSABLE_ENTITY message next
+                                                ctx
+                                | true ->
+                                    (productCollection, input) |> editProduct
+                                    return! Successful.OK () next ctx
                         }
         }
 

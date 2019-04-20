@@ -39,17 +39,20 @@ let editProductCategoryHandler (productCategoryId : string) : HttpHandler =
                         task {
                             let! input = ctx.BindJsonAsync<EditProductCategoryInput>
                                              ()
-                            let! result = input
-                                          |> editProductCategoryInputValidator.ValidateAsync
-                            match result.IsValid with
-                            | false ->
-                                let message = result |> aggregateErrorMessages
-                                return! RequestErrors.BAD_REQUEST message next
-                                            ctx
-                            | true ->
-                                (productCategoryCollection, input)
-                                |> editProductCategory
-                                return! Successful.OK () next ctx
+                            if input |> isNullObject then
+                                return! RequestErrors.BAD_REQUEST "Incorrecte value" next ctx
+                            else                 
+                                let! result = input
+                                              |> editProductCategoryInputValidator.ValidateAsync
+                                match result.IsValid with
+                                | false ->
+                                    let message = result |> aggregateErrorMessages
+                                    return! RequestErrors.UNPROCESSABLE_ENTITY message next
+                                                ctx
+                                | true ->
+                                    (productCategoryCollection, input)
+                                    |> editProductCategory
+                                    return! Successful.OK () next ctx
                         }
         }
 

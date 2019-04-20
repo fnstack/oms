@@ -14,15 +14,18 @@ let createProductBrandHandler : HttpHandler =
     fun (next : HttpFunc) (ctx : HttpContext) ->
         task {
             let! input = ctx.BindJsonAsync<CreateProductBrandInput>()
-            let! result = input
-                          |> createProductBrandInputValidator.ValidateAsync
-            return! match result.IsValid with
-                    | false ->
-                        let message = result |> aggregateErrorMessages
-                        RequestErrors.BAD_REQUEST message next ctx
-                    | true ->
-                        (productBrandCollection, input) |> createProductBrand
-                        Successful.OK () next ctx
+            if input |> isNullObject then
+                return! RequestErrors.BAD_REQUEST "Incorrecte value" next ctx
+            else
+                let! result = input
+                              |> createProductBrandInputValidator.ValidateAsync
+                return! match result.IsValid with
+                        | false ->
+                            let message = result |> aggregateErrorMessages
+                            RequestErrors.UNPROCESSABLE_ENTITY message next ctx
+                        | true ->
+                            (productBrandCollection, input) |> createProductBrand
+                            Successful.OK () next ctx
         }
 
 let editProductBrandHandler (productBrandId : string) : HttpHandler =
@@ -36,17 +39,20 @@ let editProductBrandHandler (productBrandId : string) : HttpHandler =
                         task {
                             let! input = ctx.BindJsonAsync<EditProductBrandInput>
                                              ()
-                            let! result = input
-                                          |> editProductBrandInputValidator.ValidateAsync
-                            match result.IsValid with
-                            | false ->
-                                let message = result |> aggregateErrorMessages
-                                return! RequestErrors.BAD_REQUEST message next
-                                            ctx
-                            | true ->
-                                (productBrandCollection, input)
-                                |> editProductBrand
-                                return! Successful.OK () next ctx
+                            if input |> isNullObject then
+                                return! RequestErrors.BAD_REQUEST "Incorrecte value" next ctx
+                            else                 
+                                let! result = input
+                                              |> editProductBrandInputValidator.ValidateAsync
+                                match result.IsValid with
+                                | false ->
+                                    let message = result |> aggregateErrorMessages
+                                    return! RequestErrors.UNPROCESSABLE_ENTITY message next
+                                                ctx
+                                | true ->
+                                    (productBrandCollection, input)
+                                    |> editProductBrand
+                                    return! Successful.OK () next ctx
                         }
         }
 
