@@ -6,6 +6,7 @@
   <ItemGroup>
       <Compile Include="Common\Common.Types.fs" />
       <Compile Include="Common\Common.Domain.fs" />
+      <Compile Include="Common\Common.Aggregate.fs" />
     <Compile Include="ProductCategories\ProductCategory.Types.fs" />
     <Compile Include="ProductCategories\ProductCategory.Domain.fs" />
     <Compile Include="ProductCategories\ProductCategory.Aggregate.fs" />
