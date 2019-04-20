@@ -10,5 +10,8 @@
     <Compile Include="ProductCategories\ProductCategory.Domain.fs" />
     <Compile Include="ProductCategories\ProductCategory.Aggregate.fs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="paket.references" />
+  </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

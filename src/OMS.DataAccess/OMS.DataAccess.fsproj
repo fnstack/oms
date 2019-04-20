@@ -15,5 +15,8 @@
   <ItemGroup>
     <Compile Include="Products\Product.Repository.fs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="paket.references" />
+  </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

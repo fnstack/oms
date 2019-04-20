@@ -1,4 +1,6 @@
 namespace OMS.Domain
+open System
+open System
 
 type ProductCategory =
     { Id : ProductCategoryId
@@ -7,9 +9,32 @@ type ProductCategory =
 
 type ProductCategoryCommand =
     | Create of ProductCategory
-    | Rename of id : ProductCategoryId * newName : ProductCategoryName
-    | ChangeDescription of id : ProductCategoryId * newDescription : ProductCategoryDescription
-    | Delete of id : ProductCategoryId
-//type ProductCategoryEvent =
-//    | Created of ProductCategory
-//    | Renamed
+    | Rename of {|
+                 Id : ProductCategoryId
+                 NewName : ProductCategoryName |}
+    | ChangeDescription of {|
+                            Id : ProductCategoryId
+                            NewDescription : ProductCategoryDescription |}
+    | Delete of {| Id : ProductCategoryId |}
+
+type ProductCategoryEvent =
+    | Created of {| ProductCategory : ProductCategory; Context : EventContext |}
+    | Renamed of {|
+                 Id : ProductCategoryId
+                 NewName : ProductCategoryName
+                 Context : EventContext|}
+//    interface type
+    
+type ProductCategoryEvents = ProductCategoryEvent list
+
+type ProductCategoryStateData = {
+    NextId : EventId
+    Events : (EventType * EventContext) list
+    ProductCategory : ProductCategory
+    CreatedAt : DateTimeOffset
+    UpdatedAt : DateTimeOffset
+}
+
+type ProductCategoryState =
+    | NonExistent
+    | Existent of ProductCategoryStateData

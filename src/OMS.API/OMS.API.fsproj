@@ -23,5 +23,8 @@
     <ProjectReference Include="..\OMS.Application\OMS.Application.fsproj" />
     <ProjectReference Include="..\OMS.DataAccess\OMS.DataAccess.fsproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="paket.references" />
+  </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
