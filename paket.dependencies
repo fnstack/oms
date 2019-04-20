@@ -4,8 +4,8 @@ storage: none
 
 nuget App.Metrics.AspNetCore.Health
 nuget App.Metrics.AspNetCore.Mvc
-nuget Equinox.EventStore 2.0.0-preview4 preview
-nuget Equinox.MemoryStore 2.0.0-preview4 preview
+nuget Equinox.EventStore preview
+nuget Equinox.MemoryStore preview
 nuget FluentValidation
 nuget Fsharp.Core
 nuget FSharp.UMX
