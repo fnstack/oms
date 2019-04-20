@@ -17,7 +17,6 @@ module ProductCategoryEvent =
     let extractEventId = extractContext >> EventContext.extractEventId
 
 module ProductCategoryStateData =
-
     let init (ctx : EventContext) (productCategory : ProductCategory) =
         { NextId = ctx.EventId + %1
           Events = []
@@ -27,8 +26,5 @@ module ProductCategoryStateData =
 
     let updateContext (ctx : EventContext) =
         fun (data : ProductCategoryStateData) ->
-            {
-                data with
-                    NextId = ctx.EventId + %1
-                    UpdatedAt = DateTimeOffset.Now
-            }
+            { data with NextId = ctx.EventId + %1
+                        UpdatedAt = DateTimeOffset.Now }

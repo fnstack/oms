@@ -1,6 +1,7 @@
 [<AutoOpen>]
 module OMS.API.Validation
 
+open System
 open FluentValidation.Results
 
 let aggregateErrorMessages (result : ValidationResult) =
@@ -9,3 +10,5 @@ let aggregateErrorMessages (result : ValidationResult) =
     |> Seq.reduce
            (fun current failure ->
            current + failure + System.Environment.NewLine)
+
+let isNullObject value = Object.ReferenceEquals(value, null)

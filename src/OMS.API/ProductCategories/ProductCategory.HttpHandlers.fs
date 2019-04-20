@@ -13,16 +13,19 @@ let createProductCategoryHandler : HttpHandler =
     fun (next : HttpFunc) (ctx : HttpContext) ->
         task {
             let! input = ctx.BindJsonAsync<CreateProductCategoryInput>()
-            let! result = input
-                          |> createProductCategoryInputValidator.ValidateAsync
-            return! match result.IsValid with
-                    | false ->
-                        let message = result |> aggregateErrorMessages
-                        RequestErrors.BAD_REQUEST message next ctx
-                    | true ->
-                        (productCategoryCollection, input)
-                        |> createProductCategory
-                        Successful.OK () next ctx
+            if input |> isNullObject then
+                return! RequestErrors.BAD_REQUEST "Incorrecte value" next ctx
+            else
+                let! result = input
+                              |> createProductCategoryInputValidator.ValidateAsync
+                return! match result.IsValid with
+                        | false ->
+                            let message = result |> aggregateErrorMessages
+                            RequestErrors.UNPROCESSABLE_ENTITY message next ctx
+                        | true ->
+                            (productCategoryCollection, input)
+                            |> createProductCategory
+                            Successful.OK () next ctx
         }
 
 let editProductCategoryHandler (productCategoryId : string) : HttpHandler =
