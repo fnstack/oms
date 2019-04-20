@@ -23,7 +23,7 @@ type ProductCategoryEvent =
                  Id : ProductCategoryId
                  NewName : ProductCategoryName
                  Context : EventContext|}
-//    interface type
+    interface TypeShape.UnionContract.IUnionContract
     
 type ProductCategoryEvents = ProductCategoryEvent list
 

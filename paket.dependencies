@@ -5,6 +5,7 @@ storage: none
 nuget App.Metrics.AspNetCore.Health
 nuget App.Metrics.AspNetCore.Mvc
 nuget Equinox preview
+nuget Equinox.Codec preview
 nuget Equinox.EventStore preview
 nuget Equinox.MemoryStore preview
 nuget FluentValidation
